@@ -1,0 +1,4 @@
+node_modules
+yarn.lock
+merkle-tree.sym
+merkle-tree.r1cs
