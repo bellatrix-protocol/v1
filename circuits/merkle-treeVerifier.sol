@@ -175,6 +175,16 @@ contract Verifier {
         Pairing.G2Point B;
         Pairing.G1Point C;
     }
+
+    struct Epoch {
+        uint256 id;
+        uint256 prevProofHash;
+        uint256 currentProofHash;
+    }
+
+    mapping(uint256=>Epoch) public Epochs;
+    uint256 public epochCounter;
+
     function verifyingKey() internal pure returns (VerifyingKey memory vk) {
         vk.alfa1 = Pairing.G1Point(
             20491192805390485299153009773594534940189261866228447918068658471970481763042,
@@ -194,10 +204,10 @@ contract Verifier {
              8495653923123431417604973247489272438418190587263600148770280649306958101930]
         );
         vk.delta2 = Pairing.G2Point(
-            [12743784725878693214904769890259479275870889804371578561890033281053135244317,
-             19254490695609348164352870575324264735637839528534416411703558745239469956286],
-            [15358785678955245862930735667290989200975789837021142999110498835438886193742,
-             6285298355933426205582197314245163875976696788400867556185481306743464150998]
+            [10561061605580393311214330369210171270368630061838180676708487819691766400906,
+             11859370123197268735121553688851713234292101995766471926928724873757257585857],
+            [19237558080311256460190534123621515658161317762644349660849555302909889539786,
+             11743192396954182297248462335622338855506200959926846446270909039076788113101]
         );
         vk.IC = new Pairing.G1Point[](4);
         
@@ -262,4 +272,23 @@ contract Verifier {
             return false;
         }
     }
+
+    function addEpoch(
+            uint[2] memory a,
+            uint[2][2] memory b,
+            uint[2] memory c,
+            uint[3] memory input) public 
+        { 
+            
+            bool result = verifyProof(a,b,c,input);
+            require(result==true,"Can't Verify");
+
+            Epochs[epochCounter] = Epoch({
+                id:epochCounter,
+                prevProofHash:input[2],
+                currentProofHash:input[0]
+            });
+
+            epochCounter++;
+        } 
 }
