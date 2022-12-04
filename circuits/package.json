@@ -4,6 +4,8 @@
   "main": "index.js",
   "license": "MIT",
   "dependencies": {
-    "circomlib": "^2.0.5"
+    "circomlib": "^2.0.5",
+    "keccak256-circom": "git+https://github.com/vocdoni/keccak256-circom",
+    "snarschain":"git+https://github.com/weijiekoh/snarschain"
   }
 }

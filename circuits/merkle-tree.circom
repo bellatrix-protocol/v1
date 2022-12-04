@@ -25,7 +25,9 @@ template branch(height) {
 template merkleProof(levels) {
   signal input leaves[1 << levels];
   signal input rootIn;
+  signal input lastProof;
   signal root;
+  signal output epoch;
 
   component layers[levels];
   for(var level = levels - 1; level >= 0; level--) {
@@ -41,6 +43,12 @@ template merkleProof(levels) {
   isEQ.in[1] <== rootIn;
 
   isEQ.out === 1;
+
+  component hasher = MultiMiMC7(2,91);
+  hasher.in[0] <== root;
+  hasher.in[1] <== lastProof;
+  hasher.k <== 0;
+  hasher.out ==> epoch;
 }
 
-component main{public [rootIn]} = merkleProof(3);
+component main{public [rootIn, lastProof]} = merkleProof(3);
